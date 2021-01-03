@@ -2,16 +2,14 @@ import Head from 'next/head'
 import { Pane, Spinner } from 'evergreen-ui'
 
 import { gap, pageSize } from '../styles/settings'
-import { Header, Login } from '../components'
+import { Header, Login, RunLog } from '../components'
 import { useAuthContext } from '../context/auth-context'
 
 export default function Home() {
   const { loading, loggedIn } = useAuthContext()
 
   const Page = () => (
-    <div>
-      yo
-    </div>
+    <RunLog />
   )
 
   const Loader = () => (
@@ -35,14 +33,19 @@ export default function Home() {
       <Header />
       <Pane
         is="main"
-        maxWidth={pageSize + gap * 2}
-        marginX="auto"
-        padding={gap}
+        background={loggedIn ? 'tint1' : null}
+        minHeight="calc(100vh - 52px)"
       >
-        {loading
-          ? <Loader />
-          : (loggedIn ? <Page /> : <Login />)
-        }
+        <Pane
+          maxWidth={pageSize + gap * 2}
+          marginX="auto"
+          padding={gap}
+        >
+          {loading
+            ? <Loader />
+            : (loggedIn ? <Page /> : <Login />)
+          }
+        </Pane>
       </Pane>
     </>
   )

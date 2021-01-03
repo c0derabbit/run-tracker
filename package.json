@@ -1,0 +1,30 @@
+{
+  "name": "with-magic",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@hapi/iron": "^6.0.0",
+    "@magic-sdk/admin": "^1.3.0",
+    "autoprefixer": "^10.1.0",
+    "cookie": "^0.4.1",
+    "magic-sdk": "^4.0.2",
+    "next": "^10.0.4",
+    "postcss": "^8.2.1",
+    "raw-loader": "^4.0.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-markdown": "^5.0.3",
+    "swr": "^0.3.11",
+    "tailwindcss": "^2.0.2"
+  },
+  "license": "ISC",
+  "peerDependencies": {
+    "@magic-sdk/provider": "^4.0.2",
+    "@magic-sdk/types": "^3.0.1",
+    "@types/react": "^17.0.0",
+    "webpack": "^5.11.0"
+  }
+}

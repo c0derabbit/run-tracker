@@ -1,6 +1,8 @@
 import Head from 'next/head'
+import { Pane, Spinner } from 'evergreen-ui'
 
-import Login from '../components/login'
+import { gap, pageSize } from '../styles/settings'
+import { Header, Login } from '../components'
 import { useAuthContext } from '../context/auth-context'
 
 export default function Home() {
@@ -8,35 +10,40 @@ export default function Home() {
 
   const Page = () => (
     <div>
-      <header>
-        <a href="/api/logout">
-          Log out
-          <img src="/assets/logout.svg" alt="" />
-        </a>
-      </header>
+      yo
     </div>
   )
 
   const Loader = () => (
-    <p>
-      <img src="/assets/loader.svg" alt="" /><br />
-      Loading…
-    </p>
+    <Pane
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="calc(100vh - 80px)"
+    >
+      <Spinner />
+    </Pane>
   )
 
   return (
     <>
       <Head>
-        <title>Run Tracker</title>
+        <title>Run tracker</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <main>
+      <Header />
+      <Pane
+        is="main"
+        maxWidth={pageSize + gap * 2}
+        marginX="auto"
+        padding={gap}
+      >
         {loading
           ? <Loader />
           : (loggedIn ? <Page /> : <Login />)
         }
-      </main>
+      </Pane>
     </>
   )
 }

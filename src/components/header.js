@@ -1,4 +1,4 @@
-import { Button, Heading, Pane } from 'evergreen-ui'
+import { Button, Heading, Pane, defaultTheme } from 'evergreen-ui'
 
 import { gap, pageSize } from '../styles/settings'
 import { useAuthContext } from '../context/auth-context'
@@ -23,7 +23,7 @@ export default function Header() {
       >
         <Heading
           href="/"
-          color="#234361"
+          color={defaultTheme.palette.neutral.dark}
           size={100}
           fontSize={16}
           textDecoration="none"

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Magic } from 'magic-sdk'
-import { Alert, Button, Heading, Pane, Paragraph, TextInputField } from 'evergreen-ui'
+import { Alert, Button, Heading, Pane, Paragraph, TextInputField, defaultTheme } from 'evergreen-ui'
 
 import { gap } from '../styles/settings'
 import { useAuthContext } from '../context/auth-context'
@@ -54,7 +54,7 @@ export default function Login() {
           size={100}
           fontSize={40}
           marginBottom={gap * 2}
-          color="#234361"
+          color={defaultTheme.palette.red.dark}
         >
           <strong>run</strong>tracker
         </Heading>
@@ -83,7 +83,6 @@ export default function Login() {
           <Button
             type="submit"
             appearance="primary"
-            intent="success"
             width="100%"
             height={40}
             justifyContent="center"

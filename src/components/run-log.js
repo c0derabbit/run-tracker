@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { Heading, Pane, Paragraph, Small, Table, Text } from 'evergreen-ui'
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLine, VictoryTheme } from 'victory'
 
 import { gap } from '../styles/settings'
 
@@ -7,34 +8,31 @@ const runs = [
   {
     title: 'Morning run',
     date: '04 Jan 2021 10:00:00 GMT+0000',
-    km: 3.77,
+    km: 3.31,
     duration: '23:00',
   },
   {
-    title: 'Morning run',
-    date: '03 Jan 2021 10:00:00 GMT+0000',
-    km: 3.77,
-    duration: '23:00',
-  },
-  {
-    title: 'Morning run',
-    date: '02 Jan 2021 11:00:00 GMT+0000',
-    km: 3.77,
-    duration: '23:00',
-  },
-  {
-    title: 'Morning run',
-    date: '04 Jan 2020 11:00:00 GMT+0000',
-    km: 10,
-    duration: '1:00:50',
+    title: 'Sunday morning run',
+    date: '06 Dec 2020 10:00:00 GMT+0000',
+    km: 2.99,
+    duration: '19:09',
   },
 ]
 
 function calculatePace(km, duration) {
   const [seconds, minutes = 0, hours = 0] = duration.split(':').reverse().map(n => parseInt(n))
-  const durationInMinutes = hours * 60 + minutes + seconds / 60
+  const durationInSeconds = hours * 60 * 60 + minutes * 60 + seconds
 
-  return (durationInMinutes / km).toFixed(2)
+  // TODO return in mm:ss format, not mm.decimal
+  // TODO also write tests
+  return durationInSeconds / km
+}
+
+function formatPace(pace) {
+  const seconds = parseInt(pace % 60)
+  const minutes = Math.floor(pace / 60)
+
+  return `${minutes}:${seconds.toString().padStart(2, 0)}`
 }
 
 function formatDate(date) {
@@ -62,6 +60,7 @@ const Data = ({ label, value, isFirst }) => (
 )
 
 const Card = ({ title, date, km, duration }) => (
+  // This could be used as a popup
   <Pane elevation={1} maxWidth={600} padding={gap} background="white">
     <Heading size={700}>
       {title}
@@ -78,9 +77,26 @@ const Card = ({ title, date, km, duration }) => (
 )
 
 export default function RunLog() {
+  const totalDist = runs.reduce((sum, run) => sum + run.km, 0)
+  const avgPace = runs.reduce((sum, run) => sum + calculatePace(run.km, run.duration), 0) / runs.length
+  const reversed = [...runs].reverse()
+
   return (
     <>
-      {Card(runs[0])}
+      <Paragraph>
+        Total runs: {runs.length}<br />
+        Total distance: {totalDist.toFixed(2)} km<br />
+        Average distance: {(totalDist / runs.length).toFixed(2)} km<br />
+        Average pace: {formatPace(avgPace)} min/km<br />
+      </Paragraph>
+      <Pane maxWidth={500}>
+        <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
+          <VictoryAxis tickFormat={x => dayjs(x).format('D MMM')} />
+          <VictoryAxis dependentAxis tickFormat={x => `${x} km`} />
+          <VictoryBar data={reversed} x="date" y="km" />
+          <VictoryLine data={reversed} x="date" y="km" interpolation="natural" />
+        </VictoryChart>
+      </Pane>
       <Table elevation={1} marginTop={gap} background="white">
         <Table.Head>
           <Table.TextHeaderCell>
@@ -102,7 +118,7 @@ export default function RunLog() {
               <Table.TextCell>{formatDate(run.date)}</Table.TextCell>
               <Table.TextCell>{run.km} km</Table.TextCell>
               <Table.TextCell>{run.duration}</Table.TextCell>
-              <Table.TextCell>{calculatePace(run.km, run.duration)}</Table.TextCell>
+              <Table.TextCell>{formatPace(calculatePace(run.km, run.duration))}</Table.TextCell>
             </Table.Row>
           ))}
         </Table.Body>
